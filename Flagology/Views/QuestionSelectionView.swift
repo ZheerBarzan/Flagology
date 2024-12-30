@@ -14,12 +14,13 @@ struct QuestionSelectionView: View {
                 Image("flagology").resizable().scaledToFit()
                     .frame(width: 200, height: 200)
                     .shadow(radius: 10)
-                Text("Flagology")
-                    .font(.largeTitle.monospaced())
+                Text("Geography if it was Fun!")
+                    .font(.headline.monospaced())
                     .fontWeight(.bold)
                     .foregroundColor(.black)
 
-                Text("It’s like geography class, but fun.")
+
+                Text("How many countries do you want to guess?")
                     .font(.title2.monospaced())
                     .multilineTextAlignment(.center)
                     .padding()
