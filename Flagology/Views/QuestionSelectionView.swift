@@ -1,7 +1,10 @@
 import SwiftUI
 
+/// View for selecting the number of questions to play
 struct QuestionSelectionView: View {
+    /// Reference to the game's ViewModel
     @ObservedObject var viewModel: GameViewModel
+    /// Available options for number of questions
     let questionOptions = [10, 50, 100, -1]
 
     var body: some View {
@@ -13,6 +16,7 @@ struct QuestionSelectionView: View {
 
             ForEach(questionOptions, id: \.self) { count in
                 Button(action: {
+                    // -1 represents all countries option
                     viewModel.selectedQuestionCount = count == -1 ? viewModel.countries.count : count
                     Task {
                         await viewModel.fetchCountries()

@@ -1,10 +1,13 @@
 import SwiftUI
 
+/// View that displays the main game interface
 struct GameView: View {
+    /// Reference to the game's ViewModel
     @ObservedObject var viewModel: GameViewModel
 
     var body: some View {
         VStack(spacing: 20) {
+            // Score and reset button
             HStack {
                 Text("Score: \(viewModel.score)/\(viewModel.questionCount)")
                     .font(.headline)
@@ -21,9 +24,11 @@ struct GameView: View {
                 .font(.title)
 
             if let question = viewModel.currentQuestion {
+                // Display country name to guess
                 Text(question.correctCountry.name.common)
                     .font(.title2)
 
+                // Display flag options
                 VStack(spacing: 15) {
                     ForEach(0 ..< 3) { index in
                         AsyncImage(url: URL(string: question.options[index].flags.png)) { image in
