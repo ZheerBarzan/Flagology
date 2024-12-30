@@ -8,30 +8,45 @@ struct QuestionSelectionView: View {
     let questionOptions = [10, 50, 100, -1]
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("How many countries do you want to guess?")
-                .font(.title2)
-                .multilineTextAlignment(.center)
-                .padding()
+        ZStack {
+            Color(red: 1, green: 0.8, blue: 0).ignoresSafeArea()
+            VStack(spacing: 20) {
+                Image("flagology").resizable().scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .shadow(radius: 10)
+                Text("Flagology")
+                    .font(.largeTitle.monospaced())
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
 
-            ForEach(questionOptions, id: \.self) { count in
-                Button(action: {
-                    // -1 represents all countries option
-                    viewModel.selectedQuestionCount = count == -1 ? viewModel.countries.count : count
-                    Task {
-                        await viewModel.fetchCountries()
+                Text("It’s like geography class, but fun.")
+                    .font(.title2.monospaced())
+                    .multilineTextAlignment(.center)
+                    .padding()
+
+                ForEach(questionOptions, id: \.self) { count in
+                    Button(action: {
+                        // -1 represents all countries option
+                        viewModel.selectedQuestionCount = count == -1 ? viewModel.countries.count : count
+                        Task {
+                            await viewModel.fetchCountries()
+                        }
+                    }) {
+                        Text(count == -1 ? "All Countries" : "\(count) Countries")
+                            .font(.title3.monospaced())
+                            .frame(maxWidth: 200)
+                            .padding()
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
                     }
-                }) {
-                    Text(count == -1 ? "All Countries" : "\(count) Countries")
-                        .font(.title3)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
                 }
             }
+            .padding()
         }
-        .padding()
     }
+}
+
+#Preview {
+    QuestionSelectionView(viewModel: GameViewModel())
 }
