@@ -13,7 +13,7 @@ struct LaunchScreenView: View {
                     .frame(width: 200, height: 200)
                     .shadow(radius: 10)
 
-                Text("FLAGOLOGY")
+                Text("FLAGOLOGY 🌎")
                     .font(.largeTitle.monospaced())
                     .fontWeight(.bold)
                     .foregroundColor(.black)

@@ -14,6 +14,10 @@ class GameViewModel: ObservableObject {
     @Published var selectedQuestionCount: Int?
     /// Indicates if the game is over
     @Published var isGameOver = false
+    /// Indicates if the correct answer is being shown
+    @Published var showingCorrectAnswer = false
+    /// Index of the correct answer
+    @Published var correctAnswerIndex: Int?
 
     /// Set of countries that have already been used in questions
     private var usedCountries: Set<String> = []
@@ -54,11 +58,12 @@ class GameViewModel: ObservableObject {
             isGameOver = true
             return
         }
-
+        // puts the correct country in the used countries set
         let correctCountry = availableCountries.randomElement()!
         usedCountries.insert(correctCountry.id)
 
         var options = [correctCountry]
+        // adds two more random countries to the options array
         while options.count < 3 {
             if let randomCountry = countries.randomElement(),
                !options.contains(where: { $0.id == randomCountry.id })
@@ -66,10 +71,12 @@ class GameViewModel: ObservableObject {
                 options.append(randomCountry)
             }
         }
-
+        // shuffles the options array
         options.shuffle()
+        // gets the index of the correct country in the options array
         let correctAnswerIndex = options.firstIndex(where: { $0.id == correctCountry.id })!
 
+        // creates a new question with the generated data
         currentQuestion = Question(
             correctCountry: correctCountry,
             options: options,
@@ -85,13 +92,28 @@ class GameViewModel: ObservableObject {
         if let question = currentQuestion {
             if index == question.correctAnswerIndex {
                 score += 1
-            }
-
-            if questionCount == selectedQuestionCount {
-                isGameOver = true
+                moveToNextQuestion()
             } else {
-                generateNewQuestion()
+                // Show correct answer for 2 seconds
+                showingCorrectAnswer = true
+                correctAnswerIndex = question.correctAnswerIndex
+
+                // Delay for 2 seconds before moving to next question
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.showingCorrectAnswer = false
+                    self.correctAnswerIndex = nil
+                    self.moveToNextQuestion()
+                }
             }
+        }
+    }
+
+    /// Moves to the next question or ends the game
+    private func moveToNextQuestion() {
+        if questionCount == selectedQuestionCount {
+            isGameOver = true
+        } else {
+            generateNewQuestion()
         }
     }
 
@@ -103,6 +125,8 @@ class GameViewModel: ObservableObject {
         currentQuestion = nil
         isGameOver = false
         usedCountries.removeAll()
+        showingCorrectAnswer = false
+        correctAnswerIndex = nil
     }
 
     /// Generates a performance message based on the final score
@@ -113,15 +137,15 @@ class GameViewModel: ObservableObject {
 
         switch percentage {
         case 0 ..< 25:
-            return "Keep practicing!"
+            return "Keep practicing! 📚"
         case 25 ..< 50:
-            return "Not bad, but you can do better!"
+            return "Not bad, but you can do better! 💪"
         case 50 ..< 75:
-            return "You're getting there!"
+            return "You're getting there! 🌟"
         case 75 ..< 90:
-            return "Great job!"
+            return "Great job! 🎉"
         default:
-            return "Amazing! You're a flag expert!"
+            return "Amazing! You're a flag expert! 🏆"
         }
     }
 }

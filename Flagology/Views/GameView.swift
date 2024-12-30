@@ -14,9 +14,9 @@ struct GameView: View {
                 HStack {
                     Text("Score: \(viewModel.score)/\(viewModel.selectedQuestionCount ?? 0)")
                         .font(.headline.monospaced())
-                    
+
                     Spacer()
-                    
+
                     Button(action: viewModel.resetGame) {
                         Image(systemName: "arrow.clockwise")
                             .padding()
@@ -24,22 +24,22 @@ struct GameView: View {
                             .foregroundColor(.white)
                             .background(.black)
                             .cornerRadius(10)
-                        }
+                    }
                 }
                 .padding(.horizontal)
                 Spacer()
-                
-                Text("Guess the Flag")
+
+                Text("Guess the Flag 🎯")
                     .font(.title.monospaced())
                 Spacer()
-                
+
                 if let question = viewModel.currentQuestion {
                     // Display country name to guess
                     Text(question.correctCountry.name.common)
                         .font(.title2.monospaced())
-                    
+
                     Spacer()
-                    
+
                     // Display flag options
                     VStack(spacing: 15) {
                         ForEach(0 ..< 3) { index in
@@ -54,6 +54,13 @@ struct GameView: View {
                             }
                             .frame(height: 100)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .padding(10)
+                            .background(
+                                viewModel.showingCorrectAnswer && index == viewModel.correctAnswerIndex
+                                    ? Color.black
+                                    : Color.clear
+                            ).cornerRadius(14)
+                            .animation(.easeInOut, value: viewModel.showingCorrectAnswer)
                             .onTapGesture {
                                 viewModel.checkAnswer(index)
                             }

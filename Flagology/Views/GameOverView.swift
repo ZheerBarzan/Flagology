@@ -14,13 +14,13 @@ struct GameOverView: View {
                 Text(viewModel.getPerformanceMessage())
                     .font(.title.monospaced())
                     .multilineTextAlignment(.center)
-                
+
                 // Display final score
                 Text("Final Score: \(viewModel.score)/\(viewModel.selectedQuestionCount ?? 0)")
                     .font(.title2.monospaced())
-                
+
                 // Play again button
-                Button("Play Again") {
+                Button("Play Again 🔄") {
                     viewModel.resetGame()
                 }
                 .font(.title3.monospaced())
