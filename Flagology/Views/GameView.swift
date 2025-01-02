@@ -48,18 +48,22 @@ struct GameView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 200, height: 100)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    
                             } placeholder: {
                                 ProgressView()
                             }
                             .frame(height: 100)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .shadow(radius: 5)
                             .padding(10)
                             .background(
                                 viewModel.showingCorrectAnswer && index == viewModel.correctAnswerIndex
                                     ? Color.black
                                     : Color.clear
                             ).cornerRadius(14)
+                            
+                            .opacity(viewModel.showingCorrectAnswer ? (index == viewModel.correctAnswerIndex ? 1.0 : 0.5) : 1.0)
+                            .shadow(radius: 5)
                             .animation(.easeInOut, value: viewModel.showingCorrectAnswer)
                             .onTapGesture {
                                 viewModel.checkAnswer(index)
